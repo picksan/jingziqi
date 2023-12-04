@@ -4,42 +4,46 @@
 
 using namespace std;
 
-//µçÄÔ Íæ¼Ò Æ½¾Ö ÎŞ
+//ç”µè„‘ ç©å®¶ å¹³å±€ æ— 
 enum players {Computer,Human,Draw,None};
-//¿ÉÄÜÓ®µÄÇé¿ö£¬Ò»ĞĞÒ»ÁĞ»òÕß¶Ô½Ç
-const int iWin[8][3] = { {0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{3,5,8},{0,4,8},{2,4,6} };
+//å¯èƒ½èµ¢çš„æƒ…å†µï¼Œä¸€è¡Œä¸€åˆ—æˆ–è€…å¯¹è§’
+const int iWin[8][3] = { {0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6} };
 
-//££×ÖÆåÀà
+//0 1 2
+//3 4 5
+//6 7 8
+
+
+//ï¼ƒå­—æ£‹ç±»
 class TickTackToe
 {
 public:
-    //¹¹Ôì·½·¨
+    //æ„é€ æ–¹æ³•
     TickTackToe()
     {
         _p = rand() % 2;
         reset();
     }
-    //ÓÎÏ·º¯Êı
+    //æ¸¸æˆå‡½æ•°
     void play()
     {
-        //res±íÊ¾×îÖÕ½á¹û£¬³õÊ¼ÎªÆ½¾Ö
+        //resè¡¨ç¤ºæœ€ç»ˆç»“æœï¼Œåˆå§‹ä¸ºå¹³å±€
         int res = Draw;
         while (true)
         {
-            //»­ÆåÅÌ
+            //ç”»æ£‹ç›˜
             drawGrid();
             while (true)
             {
-                
-                //Âä×Ó
+                //è½å­
                 if (_p) getHumanMove();
                 else getComputerMove();
                 drawGrid();
-                //ÅĞ¶ÏÊäÓ®
+                //åˆ¤æ–­è¾“èµ¢
                 res = checkVictory();
                 if (res != None)
                     break;
-                //¼ÆÊıÆ÷+1
+                //è®¡æ•°å™¨+1
                 ++_p;
                 _p %= 2;
             }
@@ -54,19 +58,19 @@ public:
             string r;
             cout << "Play again( Y / N )? ";
             cin >> r;
-            //²»ÊäÈëy£¬Ö±½Ó·µ»Ø£¬ÍË³öÓÎÏ·
+            //ä¸è¾“å…¥yï¼Œç›´æ¥è¿”å›ï¼Œé€€å‡ºæ¸¸æˆ
             if (r != "Y" && r != "y")
                 return;
-            //¼ÆÊıÆ÷+1
+            //è®¡æ•°å™¨+1
             ++_p %= 2;
-            //ÖØÖÃÆåÅÌ
+            //é‡ç½®æ£‹ç›˜
             reset();
 
         }
-      
+
     }
 private:
-    //Æå¾Ö¿ªÊ¼×´Ì¬
+    //æ£‹å±€å¼€å§‹çŠ¶æ€
     void reset()
     {
         for (int x = 0;x < 9;x++)
@@ -74,13 +78,13 @@ private:
             _field[x] = None;
         }
     }
-    //»­¸ñ×Ó
+    //ç”»æ ¼å­
     void drawGrid()
     {
-        //ÇåÆÁ
+        //æ¸…å±
         system("cls");
-        //¶¨Òå¿ØÖÆÌ¨ÆÁÄ»³õÊ¼×ø±ê
-        /*×ø±êÏµÍ³
+        //å®šä¹‰æ§åˆ¶å°å±å¹•åˆå§‹åæ ‡
+        /*åæ ‡ç³»ç»Ÿ
         o ----->x
         |
         |
@@ -88,27 +92,27 @@ private:
         y
         */
         COORD c = { 0,2 };
-        //ÉèÖÃ¿ØÖÆÌ¨¹â±ê
+        //è®¾ç½®æ§åˆ¶å°å…‰æ ‡
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
-        //Æå¾Ö³õÊ¼×´Ì¬
+        //æ£‹å±€åˆå§‹çŠ¶æ€
         cout << " 1 | 2 | 3 " << endl;
         cout << "---|---|---" << endl;
         cout << " 4 | 5 | 6 " << endl;
         cout << "---|---|---" << endl;
         cout << " 7 | 8 | 9 " << endl;
-        //Æå×Ó¼ÆÊıÆ÷
+        //æ£‹å­è®¡æ•°å™¨
         int f = 0;
         for (int y = 0;y < 5;y += 2)
         {
             for (int x = 1;x < 10;x += 4)
             {
-                //Èç¹ûÕâ¿ÅÆå×ÓÃ»ÓĞÊ¹ÓÃ¹ı
+                //å¦‚æœè¿™é¢—æ£‹å­æ²¡æœ‰ä½¿ç”¨è¿‡
                 if (_field[f] != None)
                 {
-                    //¸Õ¿ªÊ¼¹â±ê´Ó02¿ªÊ¼£¬ËùÒÔÕâÀïyÕûÌå×ø±êÒªÏÂÒÆ2
+                    //åˆšå¼€å§‹å…‰æ ‡ä»02å¼€å§‹ï¼Œæ‰€ä»¥è¿™é‡Œyæ•´ä½“åæ ‡è¦ä¸‹ç§»2
                     COORD c = { x,y + 2 };
                     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
-                    //ÅĞ¶ÏÆå×Ó£¬µçÄÔx£¬ÈËo
+                    //åˆ¤æ–­æ£‹å­ï¼Œç”µè„‘xï¼Œäººo
                     string o = _field[f] == Computer ? "X" : "O";
                     cout << o;
                 }
@@ -118,38 +122,38 @@ private:
         c.Y = 9;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
     }
-    //ÅĞ¶ÏÊäÓ®
+    //åˆ¤æ–­è¾“èµ¢
     int checkVictory()
     {
-        //ÅĞ¶ÏÓ®µÄÇé¿ö
+        //åˆ¤æ–­èµ¢çš„æƒ…å†µ
         for (int i = 0;i < 8;i++)
         {
             if (_field[iWin[i][0]] != None &&
-                _field[iWin[i][0]] == _field[iWin[i][1]] && 
+                _field[iWin[i][0]] == _field[iWin[i][1]] &&
                 _field[iWin[i][1]] == _field[iWin[i][2]])
             {
                 return _field[iWin[i][0]];
             }
         }
-        //i±íÊ¾Æå×ÓÊıÁ¿
+        //iè¡¨ç¤ºæ£‹å­æ•°é‡
         int i = 0;
         for (int f = 0;f < 9;f++)
         {
             if (_field[f] != None)
                 i++;
         }
-        //Èç¹ûÓĞ9¿ÅÆå×Ó£¬¾ÍÊÇÆ½¾Ö
+        //å¦‚æœæœ‰9é¢—æ£‹å­ï¼Œå°±æ˜¯å¹³å±€
         if (i == 9)
             return Draw;
-        //None ±íÊ¾»¹Î´·Ö³öÊ¤¸º£¬¼ÌĞøÏÂÆå
+        //None è¡¨ç¤ºè¿˜æœªåˆ†å‡ºèƒœè´Ÿï¼Œç»§ç»­ä¸‹æ£‹
         return None;
     }
-    //ÈËÏÂÆå
+    //äººä¸‹æ£‹
     void getHumanMove()
     {
         int m;
         cout << "Enter your move(1-9):";
-        //¿ªÊ¼ËÀÑ­»·
+        //å¼€å§‹æ­»å¾ªç¯
         while (true)
         {
             m = 0;
@@ -161,35 +165,35 @@ private:
         }
         _field[m - 1] = Human;
     }
-    //µçÄÔÏÂÆå
+    //ç”µè„‘ä¸‹æ£‹
     void getComputerMove()
     {
         int move=0;
-        //Ëæ»úÏÂÒ»²½
+        //éšæœºä¸‹ä¸€æ­¥
         do
         {
             move = rand() % 9;
         } while (_field[move]!=None);
 
-        //¶ÔÓ®µÄÇé¿ö½øĞĞÃ¶¾Ù
+        //å¯¹èµ¢çš„æƒ…å†µè¿›è¡Œæšä¸¾
         for (int i = 0;i < 8;i++)
         {
             int try1 = iWin[i][0], try2 = iWin[i][1], try3 = iWin[i][2];
-            //12ÓĞÏàÍ¬µÄ£¬ÏÂ3£¬ÏàÍ¬µÄÊÇ×Ô¼º£¬µçÄÔÓ®ÁË
+            //12æœ‰ç›¸åŒçš„ï¼Œä¸‹3ï¼Œç›¸åŒçš„æ˜¯è‡ªå·±ï¼Œç”µè„‘èµ¢äº†
             if (_field[try1] != None && _field[try1] == _field[try2] && _field[try3] == None)
             {
                 move = try3;
                 if (_field[try1] == Computer)
                     break;
             }
-            //23ÓĞÏàÍ¬µÄ£¬ÏÂ1
+            //23æœ‰ç›¸åŒçš„ï¼Œä¸‹1
             if (_field[try2] != None && _field[try2] == _field[try3] && _field[try1] == None)
             {
                 move = try1;
                 if (_field[try2] == Computer)
                     break;
             }
-            //13ÓĞÏàÍ¬µÄ£¬ÏÂ2
+            //13æœ‰ç›¸åŒçš„ï¼Œä¸‹2
             if (_field[try3] != None && _field[try1] == _field[try3] && _field[try2] == None)
             {
                 move = try2;
@@ -197,13 +201,13 @@ private:
                     break;
             }
         }
-        //µçÄÔÏÂ
+        //ç”µè„‘ä¸‹
         _field[move] = Computer;
 
     }
-    //¼ÆÊıÆ÷£¬ÓÃÀ´¼ÇÂ¼µ±Ç°Íæ¼ÒÊÇË­
+    //è®¡æ•°å™¨ï¼Œç”¨æ¥è®°å½•å½“å‰ç©å®¶æ˜¯è°
     int _p;
-    //¸ñ×Ó×´Ì¬
+    //æ ¼å­çŠ¶æ€
     int _field[9];
 
 };
@@ -212,7 +216,8 @@ private:
 
 int main()
 {
-    srand(GetTickCount64());
+    //srand(GetTickCount64());
+    srand(0);
     TickTackToe tic;
     tic.play();
     return 0;
